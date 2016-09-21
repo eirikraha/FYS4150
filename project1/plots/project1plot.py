@@ -45,7 +45,7 @@ class Rowling:
 
 if __name__ == '__main__':
     a = Rowling()
-    x, y1, y2 = a.hermione("../textfiles/1bN10", 0, 1, 2)
+    x, y1, y2 = a.hermione("../benchmarks/task_b_N_10", 0, 1, 2)
     a.harry_plotter(x, y1, y2, xlab = 'x-values', ylab = 'u- and v-values',
                     title = 'N = 10', plotlab1 = 'u(x)', plotlab2 = 'v(x)')
     """
