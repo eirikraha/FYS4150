@@ -18,6 +18,14 @@
 \usepackage[makeroom]{cancel}
 \usepackage{caption}
 \usepackage{subcaption}
+
+\usepackage{algorithmicx}
+\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+
+\usepackage{hyperref}
+
+
 \pagestyle{empty}
 \usepackage[procnames]{listings}
 \bibliographystyle{plain}
@@ -150,11 +158,11 @@ p_3\s &= p_3 - p_2\* \cdot \frac{a_3}{b_2\s} \\
 \end{align*}
 This gives us the general idea and we can write a general expression for both $p_i\s$ and $b_i\s$:
 \begin{equation}
-p_i\s = p_i - p_{i-1}\frac{a_{i}}{b_{i-1}\s}, \quad \text{for i = 2,...,n}
+p_i\s = p_i - p_{i-1}\frac{a_{i}}{b_{i-1}\s}, \quad \text{for i = 2,...,n}, \quad \text{and } p_1\s = p_1
 \label{eq:p}
 \end{equation}
 \begin{equation}
-b_i\s = b_i - \frac{c_{i-1}a_{i}}{b_{i-1}\s}, \quad \text{for i = 2,...,n}
+b_i\s = b_i - \frac{c_{i-1}a_{i}}{b_{i-1}\s}, \quad \text{for i = 2,...,n}, \quad \text{and } b_1\s = b_1
 \label{eq:b}
 \end{equation}
 Using equations \eqref{eq:b} and \eqref{eq:p} through the whole matrix is called forward substitution and we end up with:
@@ -178,9 +186,23 @@ b_3\s v_3 + c_3 v_4 = p_3\s \Rightarrow v_3 &= \frac{p_3\s - c_3v_4}{b_3\s}
 \intertext{Again, doing this for the next row (going downward and up) we find that $v_i$ can be expressend in a general way as:}
 \end{align*}
 \begin{equation}
-v_i = \frac{p_i\s - c_i v_{i+1}}{b_i\s}, \quad \text{for i = 1, ..., n-1}, \quad \text{and } v_n = \frac{p_n\s}{b_n\s}
+v_i = \frac{p_i\s - c_i v_{i+1}}{b_i\s}, \quad \text{for i = n-1,...,1}, \quad \text{and } v_n = \frac{p_n\s}{b_n\s}
+\label{eq:v}
 \end{equation}
 This is called backwards substitution. \\
+However, since matrix $\V{A}$ has the same values for a, b and c for all $i$, we can specialize equations \eqref{eq:p}, \eqref{eq:b} and \eqref{eq:v}. By inserting $a_i = c_i = -1$ and $b_i = 2$ in \eqref{eq:b} we can easily see that:
+\begin{equation}
+b_i\s = \frac{i+1}{i}, \quad \text{for i = 2,...,n}, \quad \text{and } b_1\s = b_1 = 2
+\label{eq:1bs}
+\end{equation}
+\begin{equation}
+p_i\s = p_i + \frac{p_{i-1}\s}{b_{i-1}\s}, \quad \text{for i = 2,...,n}, \quad \text{and } p_1\s = p_1
+\label{eq:1ps}
+\end{equation}
+\begin{equation}
+v_i = \frac{p_i\s + v_{i+1}}{b_i\s}, \quad \text{for i = n-1,...,1}, \quad \text{and } v_n = \frac{p_n\s}{b_n\s}
+\label{eq:1vs}
+\end{equation}
 Since our $v_i$ is an approximation to the known solution $u_i$ we can find the relative error by:
 \begin{equation}
 \epsilon_i = \log_{10}\Tom{\bigabs{\frac{v_i - u_i}{u_i}}}
@@ -189,9 +211,49 @@ Since our $v_i$ is an approximation to the known solution $u_i$ we can find the 
 \subsubsection*{LU-decompostion}
 \husk{Skriv inn noe her}
 \subsection*{Programs}
-In this section I will present the different key parts of my program. 
+In this section I will present the different key parts of my program. For the full program, please visit my  \href{https://github.com/scuper42/FYS4150/tree/master/project1}{github}.
 \subsubsection*{General tridagional solver}
-
+Implementing the equations for forward substitution, \eqref{eq:p} and \eqref{eq:b}, were done as follows: 
+\begin{algorithm}[H]
+\small
+\caption{Forward substitution}\label{alg:tri_forward}
+\begin{algorithmic}[1]
+\State $b_1^* = b_1$
+\State $p_1^* = p_1$
+\For{$i=2,\,n$}
+\State $b_i^* = b_i - a_{i-1}\cdot c_{i-1}/b_{i-1}^*$
+\State $p_i^* = p_i - p_{i-1}^*\cdot a_i/b_{i-1}^*$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+The backward substitution given in equation \eqref{eq:v} gives us:
+\begin{algorithm}[H]
+\small
+\caption{Backward substitution}\label{alg:tri_backward}
+\begin{algorithmic}[1]
+\State $v_n = p_n\s/b_n\s$
+\For{$i=n-1,\,1$}
+\State $v_i = (p_i\s - c_i \cdot v_{i+1})/b_i\s$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+Counting number of floating point operations gives us 6 for forward substitution and 3 for backward. This gives us $9n$ FLOPS in total.
+\subsubsection*{Specialized tridagional solver}
+Since all a and c-values are minus one and all b-values are 2 throughout the whole matrix, we don't need the general algorithm, but can use a more specialized algorithm. Our specialized algorithm is based on equation \eqref{eq:1ps} and \eqref{eq:1vs} (equation \eqref{eq:1bs} was calculated beforehand) and was implemented as follows:
+\begin{algorithm}[H]
+\small
+\caption{Specialized algorithm}\label{alg:tri_special}
+\begin{algorithmic}[1]
+\State $p_1^* = p_1$
+\For{$i=2,\,n$} \Comment{Forward substitution}
+\State $p_i^* = p_i + p_{i-1}^*/d_{i-1}$
+\EndFor
+\State $v_n = p_n^*/d_n$
+\For{$i=n-1,\,1$} \Comment{Backwards substitution}
+\State $v_i = (p_i^* + v_{i+1})/d_i$ 
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 \subsection*{Results}
 \subsection*{Discussion}
 \subsection*{Conclusion}
