@@ -11,7 +11,7 @@ class Rowling:
         The name? Because Hermione reads.
         """
 
-        filename = "%s.txt" %filename
+        filename = "../benchmarks/%s.txt" %filename
 
         x = []
         y1 = []
@@ -28,31 +28,33 @@ class Rowling:
             y2.append(float(data[variable3]))
         return x, y1, y2
 
-    def harry_plotter(self, x, y1, y2, xlab = 'x', ylab='y'
+    def harry_plotter(self, x, y1, y2, filename, xlab = 'x', ylab='y'
                       , plotlab1 = ' ', plotlab2 = '',
                       d=1, title = ' '):
         """
         The name? Because it's funny.
         """
-        plt.plot(x, y1, label = '%s' %plotlab1)
-        plt.plot(x, y2, label = '%s' %plotlab2)
+        plt.plot(x, y1, '-b', label = '%s' %plotlab1)
+        plt.plot(x, y2, '--g', label = '%s' %plotlab2)
         plt.xlabel('%s' %xlab)
         plt.ylabel('%s' %ylab)
         plt.legend(loc=d)
         plt.title('%s' %title)
+        plt.savefig('%s.png' %filename)
         plt.show()
 
 
 if __name__ == '__main__':
     a = Rowling()
-    x, y1, y2 = a.hermione("../benchmarks/task_b_N_10", 0, 1, 2)
-    a.harry_plotter(x, y1, y2, xlab = 'x-values', ylab = 'u- and v-values',
+    x, y1, y2 = a.hermione("task_b_N_10", 0, 1, 2)
+    a.harry_plotter(x, y1, y2, "task_b_N_10",
+                    xlab = 'x-values', ylab = 'u- and v-values',
                     title = 'N = 10', plotlab1 = 'u(x)', plotlab2 = 'v(x)')
-    """
-    x1, y3, y4 = a.hermione("../textfiles/1bN100", 0, 1, 2)
-    a.harry_plotter(x1, y3, y4, xlab = 'x-values', ylab = 'u- and v-values',
+    x1, y3, y4 = a.hermione("task_b_N_100", 0, 1, 2)
+    a.harry_plotter(x1, y3, y4, "task_b_N_100",
+                    xlab = 'x-values', ylab = 'u- and v-values',
                     title = 'N = 100',plotlab1 = 'u(x)', plotlab2 = 'v(x)')
-    x2, y5, y6 = a.hermione("../textfiles/1bN1000", 0, 1, 2)
-    a.harry_plotter(x2, y5, y6, xlab = 'x-values', ylab = 'u- and v-values',
+    x2, y5, y6 = a.hermione("task_b_N_1000", 0, 1, 2)
+    a.harry_plotter(x2, y5, y6, "task_b_N_1000",
+                    xlab = 'x-values', ylab = 'u- and v-values',
                     title = 'N = 1000', plotlab1 = 'u(x)', plotlab2 = 'v(x)')
-    """

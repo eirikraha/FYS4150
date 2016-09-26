@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     if (argc < 3)
     {
         cout<<"Usage: "<<argv[0]<<" exponent"<<" task"<<endl;
-        cout<<"For 'task', use: b, c, d, or e"<<endl;
+        cout<<"For 'task', use: b, c, or e"<<endl;
         exit(1);
     }
 
