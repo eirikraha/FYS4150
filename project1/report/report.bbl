@@ -1,3 +1,18 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{Github}
+Eirik's github.
+\newblock \url{https://github.com/scuper42/FYS4150/tree/master/project1}.
+
+\bibitem{Wiki_LU}
+Lu-decomposition.
+\newblock \url{https://en.wikipedia.org/wiki/LU_decomposition}.
+
+\bibitem{Project}
+Morten Hjorth-Jensen.
+\newblock Project 1.
+\newblock
+  \url{https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Projects/2016/Project1/project1_2016.pdf},
+  2016.
 
 \end{thebibliography}
