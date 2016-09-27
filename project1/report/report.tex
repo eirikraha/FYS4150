@@ -67,7 +67,7 @@
 The aim of this numerical experiment is to solve the one-dimensional Poisson equation with Dirichlet boundary conditions. At first we will use the formula $\V{A} \V{v} = \V{p}$ and the fact that A is a tridiagnoal matrix to devlope an algorithm that we then can compare to more general methods. We found that a specialized algorithm is better than a general and that using LU-decomposition is the slowest method. The relative error of the approximation compared to the exact solution is best at $\log_{10}(h) = -5$ where $h$ is the step length.
 \end{abstract}
 \subsection*{Introduction}
-
+This projects\husk{REF!} goal is to learn the students that giving a computer less things to do, makes it do the things you want it to do faster. 
 \subsection*{Theory}
 In this project we want to look closer at the one-dimensional Poisson's equation given as:
 \begin{equation}
@@ -242,7 +242,7 @@ Using this in our case we get:
 \intertext{Rewriting this we get:}
 \V{L}\V{y} = \V{p},& \quad \V{U}\V{v} = \V{y}
 \end{align*}
-This is solvable by using backwards substitution to find $\V{y}$ and use that to find $\V{v}$. Usually, for LU-decomposition and backwards substitution, solving it goes as $\mathcal{O} (\frac{2}{3}n^3)$.
+This is solvable by using backwards substitution to find $\V{y}$ and then use that to find $\V{v}$. Usually, for LU-decomposition and backwards substitution, solving it goes as $\mathcal{O} (\frac{2}{3}n^3)$.
 \subsection*{Programs}
 In this section I will present the different key parts of my program. For the full program, please visit my  \href{https://github.com/scuper42/FYS4150/tree/master/project1}{github}.
 \subsubsection*{General tridagional solver}
